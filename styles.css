@@ -1,0 +1,193 @@
+:root {
+  --bg: #f6efe4;
+  --ink: #1f2a30;
+  --muted: #5d6b73;
+  --panel: #fffaf3;
+  --line: #d5b4b6;
+  --accent: #116aa5;
+  --accent-2: #127475;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    url("stopjyden2.png"),
+    url("stopjyden2.png");
+    
+  background-size: cover;
+  background-position: center -325px;
+  background-attachment: fixed;
+}
+
+.story {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.panel {
+  margin: 1.2rem 0;
+  padding: 1.25rem;
+  background: color-mix(in oklab, var(--panel) 88%, white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(30, 30, 30, 0.05);
+}
+
+.hero {
+  margin-top: 10cm;
+  padding-top: 2.5rem;
+  padding-bottom: 2rem;
+}
+
+.hero-banner {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 12px;
+  border: 1px solid #d7c5ad;
+  margin-bottom: 1rem;
+}
+
+.kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+h1, h2 {
+  font-family: "Fraunces", Georgia, serif;
+  line-height: 1.08;
+  margin: 0.4rem 0 0.7rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.3rem);
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+p {
+  margin: 0.5rem 0 0.8rem;
+  line-height: 1.5;
+}
+
+.lede {
+  max-width: 65ch;
+  color: var(--muted);
+}
+
+.status {
+  margin-top: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  display: inline-block;
+  border-radius: 999px;
+  background: #f3e2cc;
+  border: 1px solid #84b6df;
+  color: #000000;
+  font-size: 0.9rem;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 0.8rem 0 1rem;
+}
+
+.controls-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.controls-grid input,
+.controls-grid select {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #d7c5ad;
+  border-radius: 10px;
+  background: #fffdf8;
+  font-family: inherit;
+  color: var(--ink);
+}
+
+.control-value {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.map {
+  width: 100%;
+  min-height: 520px;
+  border-radius: 14px;
+  border: 1px solid #d7c5ad;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.chart {
+  width: 100%;
+  min-height: 420px;
+}
+
+.chart.tall {
+  min-height: 560px;
+}
+
+.insight {
+  margin-top: 0.7rem;
+  color: var(--muted);
+  font-size: 0.96rem;
+}
+
+@media (max-width: 720px) {
+  .story {
+    padding: 1.2rem 0.7rem 3rem;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 0.9rem;
+    border-radius: 14px;
+  }
+
+  .hero-banner {
+    max-height: 180px;
+    margin-bottom: 0.8rem;
+  }
+
+  .map {
+    min-height: 420px;
+  }
+
+  .chart {
+    min-height: 360px;
+  }
+
+  .chart.tall {
+    min-height: 430px;
+  }
+}
