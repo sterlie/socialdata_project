@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>From Jutland to Copenhagen: Migration, Education, and District Choice</title>
+  <title>Jylland to Copenhagen: A Scroll Story</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
@@ -12,145 +12,87 @@
 <body>
   <main class="story">
     <section class="hero panel">
-      <p class="kicker">Social Data Analysis and Visualization · Final Project B</p>
-      <h1>From Jutland to Copenhagen:<br />Who Moves Where, and Why?</h1>
+      <p class="kicker">Social Data Story</p>
+      <h1>Jutlandian Reserve <br />- The Tale of Morden-day Urbanisation</h1>
       <p class="lede">
-        Copenhagen and Jutland are often framed as a cultural rivalry. We use 40+ years of district-level data to replace stereotypes with evidence:
-        migration origin patterns, education profiles, and how they move together over time.
+        Copenhagen has changed a lot in recent years: the streets are cleaner, the coffee is better, and the prices are much, much higher.
+        For locals mourning the loss of “old Copenhagen” and looking for someone to blame, newcomers from Jutland are an easy target.
       </p>
-      <p class="meta">
-        <strong>Research question:</strong> Do migrants from Jutland differ from locals in where they settle, and is Jutland presence higher in districts with higher education levels?
-      </p>
-    </section>
-
-    <section class="panel">
-      <h2>Story Structure</h2>
-      <div class="steps">
-        <div><b>1.</b> Map where Jutland-born residents are concentrated.</div>
-        <div><b>2.</b> Compare district time trends and citywide shifts.</div>
-        <div><b>3.</b> Test whether Jutland presence aligns with district education profiles.</div>
-        <div><b>4.</b> Separate what the data supports from what it cannot prove.</div>
-      </div>
-      <p class="insight">
-        Narrative genre: <strong>martini-glass style</strong> (guided explanatory flow + interactive exploration), following course discussions from Weeks 6-8.
+      <p class="lede">
+        The long-running “feud” between born-and-bred Copenhageners and newcomers from Jutland shows no sign of cooling off.
+        The newcomers are easily distinguishable by their accents, but who exactly are the migrants from Jutland, and where do they settle in the city?
+        What patterns can we observe, and what do they reveal about this growing group?
       </p>
     </section>
 
     <section class="panel">
-      <h2>Data Used</h2>
-      <div class="stats-grid">
-        <article class="stat-card">
-          <h3>Geodata (`bydel.csv`)</h3>
-          <p>District boundaries for Copenhagen (10 districts), used for choropleth mapping and spatial comparison.</p>
-        </article>
-        <article class="stat-card">
-          <h3>Residents by Origin (`residents.xlsx` / KKBEF9)</h3>
-          <p>Population by district, sex, age and birthplace (1977-2026). Used for Jutland-born and København-born shares.</p>
-        </article>
-        <article class="stat-card">
-          <h3>Education (`education_attainment_dataset.csv` / KKUDD2)</h3>
-          <p>Educational attainment by district and year (1985-2024). Used to compute district high-education share.</p>
-        </article>
-      </div>
-      <p class="insight">
-        Merged district-year panel: <strong>400 observations</strong> across shared years and districts.
-      </p>
-    </section>
-
-    <section class="panel">
-      <h2>Key Findings at a Glance</h2>
-      <div class="kpi-grid">
-        <article class="kpi">
-          <p class="kpi-label">Citywide Jutland Share</p>
-          <p class="kpi-value"><span id="k-jut-start">16.1%</span> → <span id="k-jut-end">14.7%</span></p>
-        </article>
-        <article class="kpi">
-          <p class="kpi-label">Citywide København-born Share</p>
-          <p class="kpi-value"><span id="k-loc-start">54.4%</span> → <span id="k-loc-end">46.0%</span></p>
-        </article>
-        <article class="kpi">
-          <p class="kpi-label">Education-Jutland Correlation</p>
-          <p class="kpi-value">All years: <span id="k-corr-all">0.40</span><br />Latest year: <span id="k-corr-latest">0.59</span></p>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h2>Interactive Map: District Composition</h2>
+      <h2>The Jutlanders’ Favorite Neighborhoods</h2>
       <p>
-        Use the controls to switch metric and year. The map combines the district geometry (`bydel.csv`) with the merged origin+education panel.
+        The density of Jutlanders in Copenhagen varies by neighborhood.
+        Explore the interactive map to see how the pattern changes by year and by metric.
+        We have now integrated the controls directly in the map panel, so you can switch between origin and education-related views.
       </p>
-      <iframe src="map.html" title="District composition map" class="viz-frame"></iframe>
+      <iframe src="map.html" title="Jutlanders Map" class="viz-frame"></iframe>
     </section>
 
     <section class="panel">
-      <h2>Interactive Trends: District and City Dynamics</h2>
+      <h2>3. Development over time by Copenhagen area</h2>
       <p>
-        Explore how district trajectories diverge over time. Select districts and metrics, then compare with citywide shares and latest-year rankings.
+        When we map the density of Jutlanders across Copenhagen’s neighborhoods over time, a familiar pattern emerges: they have excellent timing.
       </p>
-      <iframe src="time_plot.html" title="District trend explorer" class="viz-frame tall"></iframe>
+      <p>
+        The timeline stretches back to the mid-1970s, when the numbers were already high. Drawn in by jobs and education, people from rural Denmark arrived in the capital and settled where housing was cheap and plentiful.
+        The data shows the highest concentrations in Nørrebro and Østerbro: industrial, working-class districts that were a bit rough around the edges, but affordable and, crucially, available.
+      </p>
+      <p>
+        Then came the late 1980s and early 1990s, and something curious happened: they left. Or at least, many of them did.
+        Across neighborhoods, the number of Jutlanders declines steadily from the 1980s through the mid-90s and into the early 2000s.
+      </p>
+      <p>
+        As industry faded, jobs disappeared, and these areas struggled with unemployment and social challenges, the charm disappeared and so did the Jutlanders.
+      </p>
+      <p>
+        But the story doesn’t end there. From around 2000 to 2010, the curve shoots up again. The biggest surge appears in the very neighborhoods once written off, Nørrebro, Østerbro, Amager, and especially Vesterbro.
+        By the 2010s, these areas had been “sanitized”, renovated, and carefully rebranded. Cafés replaced factories, rents climbed accordingly, and suddenly Nørrebro was no longer a compromise, it was a lifestyle.
+        And, right on cue, the Jutlanders returned.
+      </p>
+      <iframe src="time_plot.html" title="Development over time by area" class="viz-frame tall"></iframe>
     </section>
 
     <section class="panel">
-      <h2>Static Evidence Highlights</h2>
+      <h2>Who Are the Newcomers? Adding Education to the Story</h2>
+      <p>
+        To go beyond “where they live”, we combine district-level education data with origin data.
+        This does not let us identify individual education levels for Jutland-born versus Copenhagen-born residents directly,
+        but it does let us test whether districts with more Jutland newcomers also tend to have higher education profiles.
+      </p>
       <div class="viz-grid two">
         <figure>
-          <img src="plots/education_vs_jutland_scatter.png" alt="Relationship between high education share and Jutland share" class="viz-img" />
+          <img src="plots/education_vs_jutland_scatter.png" alt="Education share versus Jutland share" class="viz-img" />
           <figcaption>
-            District-years with higher high-education share tend to have higher Jutland share. The association is moderate overall and stronger in the latest year.
+            District-years with higher high-education share tend to show higher Jutland presence.
           </figcaption>
         </figure>
         <figure>
-          <img src="plots/top_growth_districts_trends.png" alt="Time trends for districts with strongest rise in Jutland share" class="viz-img" />
+          <img src="plots/top_growth_districts_trends.png" alt="Top growth districts and education trends" class="viz-img" />
           <figcaption>
-            Districts with the strongest increase in Jutland presence (Vesterbro-Kongens Enghave, Amager Vest, Nørrebro) also experienced strong educational upgrading.
+            The districts with the strongest increase in Jutland presence are also among those with the strongest educational upgrading.
           </figcaption>
         </figure>
       </div>
     </section>
 
     <section class="panel">
-      <h2>What We Can and Cannot Claim</h2>
+      <h2>Explainer Notebook</h2>
       <p>
-        We can show a robust <strong>district-level association</strong> between Jutland presence and district education profile.
-      </p>
-      <p>
-        We cannot directly infer individual-level education differences between Jutland-born and København-born people from this KKUDD2 extract,
-        because it only includes the ancestry category <strong>Danish origin</strong>.
-      </p>
-    </section>
-
-    <section class="panel">
-      <h2>Reproducibility</h2>
-      <p>
-        Full methods and code are in the explainer notebook. Derived datasets and summaries are linked below.
+        Full methods, preprocessing steps, and reproducible analysis are documented in the explainer notebook.
       </p>
       <ul class="link-list">
-        <li><a href="explainer.ipynb">Explainer notebook (Jupyter)</a></li>
-        <li><a href="district_year_panel.csv">Merged district-year panel</a></li>
-        <li><a href="analysis_summary.json">Computed summary values</a></li>
-        <li><a href="build_story_assets.py">Asset generation script</a></li>
+        <li><a href="explainer.ipynb">Open the explainer notebook</a></li>
+        <li><a href="district_year_panel.csv">Merged district-year analysis table</a></li>
+        <li><a href="analysis_summary.json">Summary statistics used in the story</a></li>
       </ul>
     </section>
   </main>
-
-  <script>
-    fetch("analysis_summary.json")
-      .then((r) => r.json())
-      .then((s) => {
-        const pct = (x) => `${Number(x).toFixed(1)}%`;
-        const dec = (x) => Number(x).toFixed(2);
-
-        document.getElementById("k-jut-start").textContent = pct(s.city_jutland_share_start);
-        document.getElementById("k-jut-end").textContent = pct(s.city_jutland_share_end);
-        document.getElementById("k-loc-start").textContent = pct(s.city_local_share_start);
-        document.getElementById("k-loc-end").textContent = pct(s.city_local_share_end);
-        document.getElementById("k-corr-all").textContent = dec(s.corr_all_years);
-        document.getElementById("k-corr-latest").textContent = dec(s.corr_latest_year);
-      })
-      .catch(() => {
-        // keep fallback numbers
-      });
-  </script>
 </body>
 </html>
