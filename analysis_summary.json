@@ -1,0 +1,91 @@
+{
+  "latest_res_year": 2026,
+  "latest_edu_year": 2024,
+  "latest_join_year": 2024,
+  "corr_all_years": 0.4005960367959052,
+  "corr_latest_year": 0.5851837456355391,
+  "city_jutland_share_start": 16.105122593727025,
+  "city_jutland_share_end": 14.695218258076828,
+  "city_local_share_start": 54.376142718432035,
+  "city_local_share_end": 46.04573451729864,
+  "top_jutland_district_latest": [
+    {
+      "district": "Vesterbro-Kongens Enghave",
+      "jutland_share_pct": 16.993209214673296,
+      "local_share_pct": 42.369301751307795,
+      "jutland_residents": 10460.0
+    },
+    {
+      "district": "Indre By",
+      "jutland_share_pct": 16.892466935020128,
+      "local_share_pct": 42.1345600920069,
+      "jutland_residents": 7344.0
+    },
+    {
+      "district": "Nørrebro",
+      "jutland_share_pct": 15.785664945232064,
+      "local_share_pct": 45.61527581329562,
+      "jutland_residents": 9598.0
+    }
+  ],
+  "bottom_jutland_district_latest": [
+    {
+      "district": "Valby",
+      "jutland_share_pct": 13.583802696705922,
+      "local_share_pct": 42.86994367639529,
+      "jutland_residents": 6367.0
+    },
+    {
+      "district": "Vanløse",
+      "jutland_share_pct": 12.527295025575064,
+      "local_share_pct": 46.25945978283629,
+      "jutland_residents": 4188.0
+    },
+    {
+      "district": "Brønshøj-Husum",
+      "jutland_share_pct": 10.840167783134039,
+      "local_share_pct": 56.73949790271082,
+      "jutland_residents": 3463.0
+    }
+  ],
+  "largest_jutland_share_increase": [
+    {
+      "district": "Vesterbro-Kongens Enghave",
+      "high_ed_share_pct_1985": 8.426824656498173,
+      "high_ed_share_pct_2024": 51.76957024722567,
+      "jutland_share_pct_1985": 15.687012132041756,
+      "jutland_share_pct_2024": 17.363408858059422,
+      "jutland_share_change": 1.676396726017666,
+      "high_ed_share_change": 43.3427455907275
+    },
+    {
+      "district": "Amager Vest",
+      "high_ed_share_pct_1985": 8.33187833921151,
+      "high_ed_share_pct_2024": 45.306949631113945,
+      "jutland_share_pct_1985": 14.093191012331237,
+      "jutland_share_pct_2024": 15.06255319832335,
+      "jutland_share_change": 0.9693621859921127,
+      "high_ed_share_change": 36.97507129190244
+    },
+    {
+      "district": "Nørrebro",
+      "high_ed_share_pct_1985": 11.029660811922389,
+      "high_ed_share_pct_2024": 56.15874122826134,
+      "jutland_share_pct_1985": 15.39509536784741,
+      "jutland_share_pct_2024": 16.222991918192314,
+      "jutland_share_change": 0.827896550344903,
+      "high_ed_share_change": 45.12908041633895
+    }
+  ],
+  "dataset_overview": {
+    "residents_rows_after_cleaning": 265,
+    "residents_year_min": 1977,
+    "residents_year_max": 2026,
+    "residents_regions": 12,
+    "education_rows": 2400,
+    "education_year_min": 1985,
+    "education_year_max": 2024,
+    "education_districts": 10,
+    "combined_rows": 400
+  }
+}
