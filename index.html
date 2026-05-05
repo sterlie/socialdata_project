@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jylland to Copenhagen: Migration, Education, and District Choice</title>
+  <title>From Jutland to Copenhagen: Migration, Education, and District Choice</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
@@ -15,123 +15,142 @@
       <p class="kicker">Social Data Analysis and Visualization · Final Project B</p>
       <h1>From Jutland to Copenhagen:<br />Who Moves Where, and Why?</h1>
       <p class="lede">
-        Copenhagen and Jutland are often framed as a cultural rivalry, but migration data lets us ask a more useful question:
-        are people from Jutland and people born in Copenhagen sorting into different districts, and how does that connect to
-        district education profiles?
+        Copenhagen and Jutland are often framed as a cultural rivalry. We use 40+ years of district-level data to replace stereotypes with evidence:
+        migration origin patterns, education profiles, and how they move together over time.
       </p>
       <p class="meta">
-        <strong>Research question:</strong> Do migrants from Jutland differ from locals in where they live, and is Jutland presence higher in districts with higher education levels?
+        <strong>Research question:</strong> Do migrants from Jutland differ from locals in where they settle, and is Jutland presence higher in districts with higher education levels?
       </p>
     </section>
 
     <section class="panel">
-      <h2>Data and Scope</h2>
-      <p>
-        We combine two Copenhagen municipality datasets.
+      <h2>Story Structure</h2>
+      <div class="steps">
+        <div><b>1.</b> Map where Jutland-born residents are concentrated.</div>
+        <div><b>2.</b> Compare district time trends and citywide shifts.</div>
+        <div><b>3.</b> Test whether Jutland presence aligns with district education profiles.</div>
+        <div><b>4.</b> Separate what the data supports from what it cannot prove.</div>
+      </div>
+      <p class="insight">
+        Narrative genre: <strong>martini-glass style</strong> (guided explanatory flow + interactive exploration), following course discussions from Weeks 6-8.
       </p>
+    </section>
+
+    <section class="panel">
+      <h2>Data Used</h2>
       <div class="stats-grid">
         <article class="stat-card">
-          <h3>Residents by Origin (KKBEF9)</h3>
-          <p>50 years (1977-2026), 12 birth regions, 10 main districts (+ outside category).</p>
-          <p>After cleaning and aggregation: <strong>265 base rows</strong> used to build district-year origin shares.</p>
+          <h3>Geodata (`bydel.csv`)</h3>
+          <p>District boundaries for Copenhagen (10 districts), used for choropleth mapping and spatial comparison.</p>
         </article>
         <article class="stat-card">
-          <h3>Education by District (KKUDD2)</h3>
-          <p>40 years (1985-2024), age/sex/education dimensions, district-level plus finer sub-areas.</p>
-          <p>Filtered to district + age total + sex total: <strong>2,400 rows</strong>.</p>
+          <h3>Residents by Origin (`residents.xlsx` / KKBEF9)</h3>
+          <p>Population by district, sex, age and birthplace (1977-2026). Used for Jutland-born and København-born shares.</p>
         </article>
         <article class="stat-card">
-          <h3>Merged Analysis Panel</h3>
-          <p>District-year merge for shared years and districts.</p>
-          <p><strong>400 district-year points</strong> used in correlation and trend analysis.</p>
+          <h3>Education (`education_attainment_dataset.csv` / KKUDD2)</h3>
+          <p>Educational attainment by district and year (1985-2024). Used to compute district high-education share.</p>
         </article>
       </div>
       <p class="insight">
-        Definitions used in this story: <em>Jutland-born</em> = Nordjylland + Vestjylland + Østjylland + Sydjylland. <em>Locals</em> = born in Københavns Kommune.
+        Merged district-year panel: <strong>400 observations</strong> across shared years and districts.
       </p>
     </section>
 
     <section class="panel">
-      <h2>Where Jutland-born Residents Live</h2>
+      <h2>Key Findings at a Glance</h2>
+      <div class="kpi-grid">
+        <article class="kpi">
+          <p class="kpi-label">Citywide Jutland Share</p>
+          <p class="kpi-value"><span id="k-jut-start">16.1%</span> → <span id="k-jut-end">14.7%</span></p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-label">Citywide København-born Share</p>
+          <p class="kpi-value"><span id="k-loc-start">54.4%</span> → <span id="k-loc-end">46.0%</span></p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-label">Education-Jutland Correlation</p>
+          <p class="kpi-value">All years: <span id="k-corr-all">0.40</span><br />Latest year: <span id="k-corr-latest">0.59</span></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Interactive Map: District Composition</h2>
       <p>
-        The map below (interactive) shows how Jutland-born residents distribute across Copenhagen districts.
-        Use zoom and hover to inspect district-level values.
+        Use the controls to switch metric and year. The map combines the district geometry (`bydel.csv`) with the merged origin+education panel.
       </p>
-      <iframe src="map.html" title="Jutlanders Map" class="viz-frame"></iframe>
+      <iframe src="map.html" title="District composition map" class="viz-frame"></iframe>
     </section>
 
     <section class="panel">
-      <h2>Long-Run District Dynamics</h2>
+      <h2>Interactive Trends: District and City Dynamics</h2>
       <p>
-        The interactive line chart shows absolute Jutland-born counts over time by district. We see a dip through the 1990s and a renewed rise in the 2000s in several core districts.
+        Explore how district trajectories diverge over time. Select districts and metrics, then compare with citywide shares and latest-year rankings.
       </p>
-      <iframe src="time_plot.html" title="Development over time by area" class="viz-frame"></iframe>
+      <iframe src="time_plot.html" title="District trend explorer" class="viz-frame tall"></iframe>
     </section>
 
     <section class="panel">
-      <h2>Jutland vs Locals: Citywide and by District</h2>
+      <h2>Static Evidence Highlights</h2>
       <div class="viz-grid two">
         <figure>
-          <img src="plots/citywide_origin_shares.png" alt="Citywide origin shares over time" class="viz-img" />
+          <img src="plots/education_vs_jutland_scatter.png" alt="Relationship between high education share and Jutland share" class="viz-img" />
           <figcaption>
-            Citywide shares: Jutland-born falls slightly from <strong>16.1%</strong> (1977) to <strong>14.7%</strong> (2026), while København-born falls more strongly from <strong>54.4%</strong> to <strong>46.0%</strong>.
+            District-years with higher high-education share tend to have higher Jutland share. The association is moderate overall and stronger in the latest year.
           </figcaption>
         </figure>
         <figure>
-          <img src="plots/district_jutland_share_latest.png" alt="Jutland share by district in 2024" class="viz-img" />
+          <img src="plots/top_growth_districts_trends.png" alt="Time trends for districts with strongest rise in Jutland share" class="viz-img" />
           <figcaption>
-            In 2024, highest Jutland shares are in <strong>Vesterbro-Kongens Enghave (17.4%)</strong>, <strong>Indre By (17.0%)</strong>, and <strong>Nørrebro (16.2%)</strong>.
+            Districts with the strongest increase in Jutland presence (Vesterbro-Kongens Enghave, Amager Vest, Nørrebro) also experienced strong educational upgrading.
           </figcaption>
         </figure>
       </div>
     </section>
 
     <section class="panel">
-      <h2>Education Profile and Jutland Presence</h2>
-      <div class="viz-grid two">
-        <figure>
-          <img src="plots/education_vs_jutland_scatter.png" alt="Scatter plot of high education share vs Jutland share" class="viz-img" />
-          <figcaption>
-            Across district-years, higher district education share is associated with higher Jutland share
-            (correlation <strong>r = 0.40</strong> across all years; <strong>r = 0.59</strong> in 2024).
-          </figcaption>
-        </figure>
-        <figure>
-          <img src="plots/top_growth_districts_trends.png" alt="Time trends for districts with largest rise in Jutland share" class="viz-img" />
-          <figcaption>
-            Districts with strongest Jutland-share growth (Vesterbro-Kongens Enghave, Amager Vest, Nørrebro) also show strong increases in high-education share over time.
-          </figcaption>
-        </figure>
-      </div>
-      <p class="insight">
-        Interpretation: the data supports the idea that Jutland migration is more concentrated in increasingly high-education districts,
-        especially in central and recently transformed areas.
+      <h2>What We Can and Cannot Claim</h2>
+      <p>
+        We can show a robust <strong>district-level association</strong> between Jutland presence and district education profile.
+      </p>
+      <p>
+        We cannot directly infer individual-level education differences between Jutland-born and København-born people from this KKUDD2 extract,
+        because it only includes the ancestry category <strong>Danish origin</strong>.
       </p>
     </section>
 
     <section class="panel">
-      <h2>Limitations and What We Can Claim</h2>
+      <h2>Reproducibility</h2>
       <p>
-        The KKUDD2 export used here only includes the ancestry category <strong>Danish origin</strong>. This means we cannot directly estimate education levels of
-        Jutland-born individuals versus Copenhagen-born individuals at person level.
-      </p>
-      <p>
-        So our strongest claim is about <strong>district-level association</strong>: districts with higher education shares also tend to have higher Jutland presence.
-        That is not the same as proving individual-level causality.
-      </p>
-    </section>
-
-    <section class="panel">
-      <h2>Explainer Notebook and Reproducibility</h2>
-      <p>
-        Behind-the-scenes analysis, preprocessing, and methodology are documented in the explainer notebook and derived panel data.
+        Full methods and code are in the explainer notebook. Derived datasets and summaries are linked below.
       </p>
       <ul class="link-list">
         <li><a href="explainer.ipynb">Explainer notebook (Jupyter)</a></li>
         <li><a href="district_year_panel.csv">Merged district-year panel</a></li>
-        <li><a href="analysis_summary.json">Key computed summary values</a></li>
+        <li><a href="analysis_summary.json">Computed summary values</a></li>
+        <li><a href="build_story_assets.py">Asset generation script</a></li>
       </ul>
     </section>
   </main>
+
+  <script>
+    fetch("analysis_summary.json")
+      .then((r) => r.json())
+      .then((s) => {
+        const pct = (x) => `${Number(x).toFixed(1)}%`;
+        const dec = (x) => Number(x).toFixed(2);
+
+        document.getElementById("k-jut-start").textContent = pct(s.city_jutland_share_start);
+        document.getElementById("k-jut-end").textContent = pct(s.city_jutland_share_end);
+        document.getElementById("k-loc-start").textContent = pct(s.city_local_share_start);
+        document.getElementById("k-loc-end").textContent = pct(s.city_local_share_end);
+        document.getElementById("k-corr-all").textContent = dec(s.corr_all_years);
+        document.getElementById("k-corr-latest").textContent = dec(s.corr_latest_year);
+      })
+      .catch(() => {
+        // keep fallback numbers
+      });
+  </script>
 </body>
 </html>

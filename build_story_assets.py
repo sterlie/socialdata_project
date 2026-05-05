@@ -303,6 +303,63 @@ def make_plots(combined: pd.DataFrame, city_ts: pd.DataFrame, summary: dict) -> 
     plt.close(fig)
 
 
+def build_web_metrics(combined: pd.DataFrame, city_ts: pd.DataFrame, summary: dict) -> dict:
+    metric_keys = [
+        "jutland_share_pct",
+        "local_share_pct",
+        "high_ed_share_pct",
+        "jutland_residents",
+        "local_residents",
+        "total_residents",
+    ]
+
+    metrics_meta = {
+        "jutland_share_pct": {"label": "Jutland-born share", "unit": "%", "decimals": 2},
+        "local_share_pct": {"label": "København-born share", "unit": "%", "decimals": 2},
+        "high_ed_share_pct": {"label": "High-education share", "unit": "%", "decimals": 2},
+        "jutland_residents": {"label": "Jutland-born residents", "unit": "count", "decimals": 0},
+        "local_residents": {"label": "København-born residents", "unit": "count", "decimals": 0},
+        "total_residents": {"label": "Total residents", "unit": "count", "decimals": 0},
+    }
+
+    years = sorted(int(y) for y in combined["year"].unique())
+    districts = sorted(combined["district"].unique().tolist())
+
+    district_year = {}
+    for y in years:
+        ydf = combined[combined["year"] == y]
+        district_year[str(y)] = {}
+        for _, row in ydf.iterrows():
+            district_year[str(y)][row["district"]] = {
+                k: (float(row[k]) if pd.notnull(row[k]) else None) for k in metric_keys
+            }
+
+    city_metric_cols = ["year", "jutland_share_pct", "local_share_pct", "jutland_residents", "local_residents", "total_residents"]
+    city_year = {}
+    for _, row in city_ts[city_metric_cols].iterrows():
+        city_year[str(int(row["year"]))] = {
+            "jutland_share_pct": float(row["jutland_share_pct"]),
+            "local_share_pct": float(row["local_share_pct"]),
+            "jutland_residents": float(row["jutland_residents"]),
+            "local_residents": float(row["local_residents"]),
+            "total_residents": float(row["total_residents"]),
+        }
+
+    return {
+        "latest_year": int(summary["latest_join_year"]),
+        "years": years,
+        "districts": districts,
+        "metrics": metrics_meta,
+        "district_year": district_year,
+        "city_year": city_year,
+        "highlights": {
+            "corr_all_years": float(summary["corr_all_years"]),
+            "corr_latest_year": float(summary["corr_latest_year"]),
+            "top_jutland_latest": summary["top_jutland_district_latest"],
+        },
+    }
+
+
 def main() -> None:
     residents_raw, years = load_residents(ROOT / "residents.xlsx")
     residents_long = reshape_residents(residents_raw, years)
@@ -328,6 +385,17 @@ def main() -> None:
 
     # Export merged panel for transparency and notebook use
     combined.sort_values(["district", "year"]).to_csv(ROOT / "district_year_panel.csv", index=False)
+    web_metrics = build_web_metrics(combined, city_ts, summary)
+    (ROOT / "web_metrics.json").write_text(json.dumps(web_metrics, ensure_ascii=False), encoding="utf-8")
+    (ROOT / "web_metrics.js").write_text(
+        "window.WEB_METRICS = " + json.dumps(web_metrics, ensure_ascii=False) + ";",
+        encoding="utf-8",
+    )
+    bydel_geo = json.loads((ROOT / "bydel.csv").read_text(encoding="utf-8"))
+    (ROOT / "bydel_geo.js").write_text(
+        "window.BYDEL_GEOJSON = " + json.dumps(bydel_geo, ensure_ascii=False) + ";",
+        encoding="utf-8",
+    )
 
     print("Wrote:")
     print("- plots/citywide_origin_shares.png")
@@ -336,6 +404,9 @@ def main() -> None:
     print("- plots/top_growth_districts_trends.png")
     print("- district_year_panel.csv")
     print("- analysis_summary.json")
+    print("- web_metrics.json")
+    print("- web_metrics.js")
+    print("- bydel_geo.js")
 
 
 if __name__ == "__main__":
