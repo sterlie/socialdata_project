@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Tale of Morden-day Urbanisation</title>
+  <title>Jutlandian Reserve: Migration, Education, and the New Copenhagen</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
@@ -15,50 +15,149 @@
       <p class="kicker">Social Data Story</p>
       <h1>Jutlandian Reserve <br> - The Tale of Morden-day Urbanisation</h1>
       <p class="lede">
-        Copenhagen has changed a lot in recent years: the streets are cleaner, the coffee is better, and the prices are much, much higher. 
-        For locals mourning the loss of “old Copenhagen” and looking for someone to blame, newcomers from Jutland are an easy target. 
-        The long-running “feud” between born-and-bred Copenhageners and newcomers from Jutland shows no sign of cooling off.
+        Copenhagen has changed a lot in recent years: the streets are cleaner, the coffee is better, and the prices are much, much higher.
+        For locals mourning the loss of "old Copenhagen" and looking for someone to blame, newcomers from Jutland are an easy target.
+        The long-running "feud" between born-and-bred Copenhageners and newcomers from Jutland shows no sign of cooling off.
 
-        The newcomers are easily distinguishable by their accents, but who exactly are the migrants from Jutland, and where do they settle in the city? 
-        
+        The newcomers are easily distinguishable by their accents, but who exactly are the migrants from Jutland, and where do they settle in the city?
+
         What patterns can we observe, and what do they reveal about this growing group?
       </p>
-      <!-- No JS status, static site -->
+      <p class="scope-note">
+        Scope note: map and resident counts use 1977-2026. Joint education + origin analysis uses overlapping years 1985-2024.
+      </p>
     </section>
 
     <section class="panel">
-      <h2>The Jutlanders’ Favorite Neighborhoods</h2>
+      <h2>Key Findings</h2>
       <p>
-        The density of Jutlanders in Copenhagen varies by neighborhood. Use the controls below to filter by year (1977–2026), sex, and Jylland region to see how the picture changes over time.
+        The stereotype is loud, but the data is more nuanced. Jutland-born share in the district panel is fairly stable at city level,
+        while the local-born share falls much more over time.
       </p>
-      <iframe src="map.html" title="Jutlanders Map" style="width:100%;max-width:900px;height:660px;display:block;margin:1.5rem auto;border-radius:12px;border:none;box-shadow:0 2px 12px #0002;"></iframe>
+      <div class="findings-grid">
+        <article class="finding-card">
+          <p class="finding-label">Citywide Jutland-born share</p>
+          <p class="finding-value" id="stat-jutland-share">Loading...</p>
+        </article>
+        <article class="finding-card">
+          <p class="finding-label">Citywide København-born share</p>
+          <p class="finding-value" id="stat-local-share">Loading...</p>
+        </article>
+        <article class="finding-card">
+          <p class="finding-label">District education/Jutland correlation</p>
+          <p class="finding-value" id="stat-correlation">Loading...</p>
+        </article>
+      </div>
     </section>
-
 
     <section class="panel">
-      <h2>Development over time by Copenhagen area</h2>
+      <h2>The Jutlanders' Favorite Neighborhoods</h2>
       <p>
-        When we map the density of Jutlanders across Copenhagen’s neighborhoods over time, a familiar pattern emerges: they have excellent timing.
-        <br><br>
-
-        The timeline stretches back to the mid-1970s, when the numbers were already high. Drawn in by jobs and education, people from rural Denmark arrived in the capital and settled where housing was cheap and plentiful. 
-        The data shows the highest concentrations in Nørrebro and Østerbro: industrial, working-class districts that were a bit rough around the edges, but affordable and, crucially, available.
-        <br><br>
-
-        Then came the late 1980s and early 1990s, and something curious happened: they left. Or at least, many of them did. 
-        Across neighborhoods, the number of Jutlanders declines steadily from the 1980s through the mid-90s and into the early 2000s. 
-        <br><br>
-        As industry faded, jobs disappeared, and these areas struggled with unemployment and social challenges, the charm disappeared and so did the Jutlanders.
-        <br> <br>    
-        But the story doesn’t end there. From around 2000 to 2010, the curve shoots up again. The biggest surge appears in the very neighborhoods once written off,Nørrebro, Østerbro, Amager, and especially Vesterbro. 
-        By the 2010's, these areas had been “sanitized”, renovated, and carefully rebranded. Cafés replaced factories, rents climbed accordingly, and suddenly Nørrebro was no longer a compromise, it was a lifestyle.
-
-        And, right on cue, the Jutlanders returned.
+        The density of Jutlanders in Copenhagen varies by neighborhood. Use the controls below to filter by year (1977-2026), sex, and Jylland region to see how the picture changes over time.
       </p>
-      <iframe src="time_plot.html" title="Development over time by area" style="width:100%;max-width:900px;height:600px;display:block;margin:1.5rem auto;border-radius:12px;border:none;box-shadow:0 2px 12px #0002;"></iframe>
+      <iframe class="viz-frame" src="map.html" title="Jutlanders Map"></iframe>
+      <p class="scope-note">Map years: 1977-2026 (resident register only).</p>
     </section>
 
-  </main>
+    <section class="panel">
+      <h2>How Districts Changed Over Time</h2>
+      <p>
+        In several districts, Jutland-born counts dip during late-industrial decline and rise again in periods associated with
+        urban redevelopment. This supports a timing story, not a "takeover" story.
+      </p>
+      <iframe class="viz-frame" src="time_plot.html" title="Jutland Residents Over Time by District"></iframe>
+      <p class="scope-note">Timeline years: 1977-2026 (resident register only).</p>
+    </section>
 
+    <section class="panel">
+      <h2>Evidence on Education and Gentrification</h2>
+      <p>
+        When we join district origin composition with district education composition (1985-2024), we see a consistent positive
+        association: districts with higher high-education shares also tend to have higher Jutland-born shares.
+      </p>
+
+      <div class="viz-grid two">
+        <figure>
+          <img class="viz-img" src="plots/citywide_origin_shares.png" alt="Citywide origin shares over time" />
+          <figcaption>
+            Citywide trend: Jutland-born share is comparatively stable, while København-born share declines more strongly.
+          </figcaption>
+        </figure>
+        <figure>
+          <img class="viz-img" src="plots/district_jutland_share_latest.png" alt="Latest-year district ranking of Jutland share" />
+          <figcaption>
+            Latest-year ranking (2024): Vesterbro-Kongens Enghave, Indre By, and Nørrebro are at the top.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="viz-grid two">
+        <figure>
+          <img class="viz-img" src="plots/education_vs_jutland_scatter.png" alt="Scatter of high education share vs Jutland share" />
+          <figcaption>
+            District-year scatter with trend line: positive relationship between high-education share and Jutland-born share.
+          </figcaption>
+        </figure>
+        <figure>
+          <img class="viz-img" src="plots/top_growth_districts_trends.png" alt="Trends in districts with strongest increase" />
+          <figcaption>
+            Districts with the strongest increase in Jutland share also show strong growth in high-education share.
+          </figcaption>
+        </figure>
+      </div>
+
+      <p class="scope-note">Joint education + origin figures use overlapping years: 1985-2024.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Interactive District Explorer</h2>
+      <p>
+        Compare one district against city baseline across years. Switch between shares and counts to inspect how composition and
+        scale evolve.
+      </p>
+
+      <div class="explorer-controls">
+        <label>
+          District
+          <select id="explorer-district"></select>
+        </label>
+        <label>
+          Metric
+          <select id="explorer-metric"></select>
+        </label>
+        <label>
+          Start year
+          <select id="explorer-start"></select>
+        </label>
+        <label>
+          End year
+          <select id="explorer-end"></select>
+        </label>
+      </div>
+
+      <div class="explorer-chart-wrap">
+        <svg id="explorer-chart" viewBox="0 0 900 340" role="img" aria-label="District trend chart"></svg>
+      </div>
+      <p id="explorer-summary" class="scope-note">Loading interactive trend...</p>
+      <p id="explorer-baseline-note" class="scope-note"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Interpretation and Limits</h2>
+      <p>
+        The story supports correlation, not causation. We do not claim that rising education causes Jutland migration or vice versa.
+        We show that these district-level trends co-move over decades.
+      </p>
+      <ul class="bullet-list">
+        <li>Education dataset in this export is limited to Danish-origin aggregation, not individual origin-level education by subgroup.</li>
+        <li>Some resident-only views extend to 2026, while merged analysis ends in 2024 due to data overlap.</li>
+        <li>Results are district-level and cannot identify individual mobility pathways.</li>
+      </ul>
+    </section>
+
+    
+
+  <script src="web_metrics.js"></script>
+  <script src="story_explorer.js"></script>
 </body>
 </html>
