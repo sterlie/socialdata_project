@@ -1,388 +1,185 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>District Map Explorer</title>
-  <script src="bydel_geo.js"></script>
-  <script src="web_metrics.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jutlanders Map</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    :root {
-      --ink: #16232b;
-      --paper: #f7f7f4;
-      --panel: rgba(255, 255, 255, 0.94);
-      --line: #d6d3d1;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; font-family: 'Space Grotesk', system-ui, sans-serif; background: #f8f7f4; }
+    #app { display: flex; flex-direction: column; height: 100%; }
+    #controls {
+      display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-end;
+      padding: 12px 16px; background: #fff; border-bottom: 1px solid #e5e7eb;
+      flex-shrink: 0;
     }
-
-    html, body {
-      margin: 0;
-      height: 100%;
-      font-family: "Space Grotesk", "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: var(--paper);
-    }
-
-    #app {
-      height: 100%;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-
-    .toolbar {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr;
-      gap: 0.6rem;
-      padding: 0.65rem 0.75rem;
-      background: #f8f6f2;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .control {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 0.45rem 0.6rem;
-    }
-
-    .control label {
-      display: block;
-      font-size: 0.78rem;
-      color: #4b5563;
-      margin-bottom: 0.25rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      font-weight: 700;
-    }
-
-    .control select,
-    .control input[type="range"] {
-      width: 100%;
-    }
-
-    .year-value {
-      margin-left: 0.45rem;
-      font-weight: 700;
-      color: #0f766e;
-    }
-
-    #map {
-      height: 100%;
-      width: 100%;
-    }
-
-    .city-summary {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.35rem;
-      font-size: 0.86rem;
-    }
-
-    .city-summary div {
-      background: #fcfcfb;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 0.38rem 0.45rem;
-      line-height: 1.25;
-    }
-
-    .city-summary b {
-      font-size: 0.94rem;
-      color: #111827;
-    }
-
-    .legend {
-      background: rgba(255, 255, 255, 0.94);
-      padding: 0.55rem 0.6rem;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      box-shadow: 0 2px 10px #00000018;
-      width: 220px;
-    }
-
-    .legend-title {
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: #4b5563;
-      margin-bottom: 0.3rem;
-      font-weight: 700;
-    }
-
-    .legend-ramp {
-      height: 12px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      margin-bottom: 0.28rem;
-    }
-
-    .legend-scale {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: #334155;
-    }
-
-    .leaflet-tooltip {
-      font-size: 0.85rem;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 2px 8px #0000001a;
-    }
-
-    @media (max-width: 800px) {
-      .toolbar {
-        grid-template-columns: 1fr;
-      }
-    }
+    .ctrl-group { display: flex; flex-direction: column; gap: 4px; min-width: 120px; }
+    .ctrl-group label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; }
+    .ctrl-group select { font-size: 13px; padding: 5px 8px; border: 1px solid #d1d5db; border-radius: 6px; background: #f9fafb; color: #111827; cursor: pointer; }
+    #year-group { flex: 1; min-width: 200px; max-width: 480px; }
+    #year-group .slider-row { display: flex; align-items: center; gap: 10px; }
+    #year-group input[type=range] { flex: 1; accent-color: #d97706; cursor: pointer; }
+    #year-label { font-size: 15px; font-weight: 700; color: #1e3a5f; min-width: 42px; }
+    #map { flex: 1; min-height: 0; }
+    .legend { background: rgba(255,255,255,0.92); padding: 8px 12px; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.15); font-size: 12px; line-height: 1.6; min-width: 130px; }
+    .legend h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; margin-bottom: 6px; }
+    .legend-item { display: flex; align-items: center; gap: 7px; }
+    .legend-swatch { width: 16px; height: 14px; border-radius: 3px; flex-shrink: 0; }
   </style>
 </head>
 <body>
-  <div id="app">
-    <div class="toolbar">
-      <div class="control">
-        <label for="metric">Map Metric</label>
-        <select id="metric"></select>
-      </div>
-      <div class="control">
-        <label for="year">Year <span id="yearValue" class="year-value"></span></label>
-        <input id="year" type="range" />
-      </div>
-      <div class="control">
-        <label>City Snapshot</label>
-        <div class="city-summary" id="citySummary"></div>
+<div id="app">
+  <div id="controls">
+    <div class="ctrl-group" id="year-group">
+      <label>Year</label>
+      <div class="slider-row">
+        <input type="range" id="year-slider" min="1977" max="2026" value="2025" step="1" />
+        <span id="year-label">2025</span>
       </div>
     </div>
-    <div id="map"></div>
+    <div class="ctrl-group">
+      <label>Sex</label>
+      <select id="sex-select">
+        <option value="All">All</option>
+        <option value="Kvinder">Women</option>
+        <option value="Mænd">Men</option>
+      </select>
+    </div>
+    <div class="ctrl-group" style="min-width:180px">
+      <label>Jylland Region</label>
+      <select id="region-select">
+        <option value="All">All Jylland</option>
+        <option value="Nordjylland">Nordjylland</option>
+        <option value="Sydjylland">Sydjylland</option>
+        <option value="Vestjylland">Vestjylland</option>
+        <option value="Østjylland">Østjylland</option>
+      </select>
+    </div>
   </div>
+  <div id="map"></div>
+</div>
+<script>
+const leafletMap = L.map('map', { center: [55.68, 12.56], zoom: 11 });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  subdomains: 'abcd', maxZoom: 19,
+}).addTo(leafletMap);
 
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    const map = L.map("map", { zoomControl: true }).setView([55.68, 12.56], 11.6);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-      maxZoom: 20
-    }).addTo(map);
+const COLOR_STEPS = ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026','#800026','#4d0015'];
 
-    const metricSelect = document.getElementById("metric");
-    const yearInput = document.getElementById("year");
-    const yearValue = document.getElementById("yearValue");
-    const citySummary = document.getElementById("citySummary");
+function getColor(value, maxVal) {
+  if (!value || maxVal === 0) return '#e5e7eb';
+  const idx = Math.min(Math.floor((value / maxVal) * (COLOR_STEPS.length - 1)), COLOR_STEPS.length - 1);
+  return COLOR_STEPS[idx];
+}
 
-    const state = { metric: "jutland_share_pct", year: 2024 };
+let appData = null, geojsonLayer = null, labelLayer = null, legendControl = null;
+let currentYear = '2025', currentSex = 'All', currentRegion = 'All';
 
-    let geoData = null;
-    let metricsData = null;
-    let geoLayer = null;
+function ringCentroid(ring) {
+  let twoArea = 0, cx = 0, cy = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const [x1,y1] = ring[i], [x2,y2] = ring[i+1];
+    const cross = x1*y2 - x2*y1;
+    twoArea += cross; cx += (x1+x2)*cross; cy += (y1+y2)*cross;
+  }
+  if (twoArea === 0) return [ring.reduce((s,p)=>s+p[0],0)/ring.length, ring.reduce((s,p)=>s+p[1],0)/ring.length];
+  return [cx/(3*twoArea), cy/(3*twoArea)];
+}
 
-    const legend = L.control({ position: "bottomright" });
-    legend.onAdd = function() {
-      const div = L.DomUtil.create("div", "legend");
-      div.innerHTML = `
-        <div class="legend-title" id="legendTitle">Legend</div>
-        <div class="legend-ramp" id="legendRamp"></div>
-        <div class="legend-scale"><span id="legendMin">0</span><span id="legendMax">0</span></div>
-      `;
-      return div;
-    };
-    legend.addTo(map);
+function featureCentroid(feat) {
+  const g = feat.geometry;
+  let rings = g.type==='Polygon' ? [g.coordinates[0]] : g.type==='MultiPolygon' ? g.coordinates.map(p=>p[0]) : [];
+  if (!rings.length) return null;
+  const best = rings.reduce((a,b) => {
+    const area = r => { const xs=r.map(p=>p[0]),ys=r.map(p=>p[1]); return (Math.max(...xs)-Math.min(...xs))*(Math.max(...ys)-Math.min(...ys)); };
+    return area(b)>area(a)?b:a;
+  });
+  return ringCentroid(best);
+}
 
-    function formatNumber(value, decimals = 1) {
-      if (value == null || Number.isNaN(value)) return "n/a";
-      return Number(value).toLocaleString("en-US", {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-      });
+function render() {
+  if (!appData) return;
+  const yearData = (appData.data[currentRegion] || {})[currentSex] || {};
+  const yearRows = yearData[currentYear] || {};
+  const values = Object.values(yearRows).filter(v => v > 0);
+  const maxVal = values.length ? Math.max.apply(null, values) : 1;
+
+  if (geojsonLayer) { leafletMap.removeLayer(geojsonLayer); geojsonLayer = null; }
+  if (labelLayer)   { leafletMap.removeLayer(labelLayer);   labelLayer = null; }
+
+  geojsonLayer = L.geoJSON(appData.geo, {
+    style: function(feat) {
+      var name = (feat.properties && feat.properties.navn) ? feat.properties.navn : '';
+      var value = yearRows[name] || 0;
+      return { fillColor: getColor(value, maxVal), fillOpacity: 0.8, color: '#374151', weight: 1.2, opacity: 0.6 };
+    },
+    onEachFeature: function(feat, layer) {
+      var name = (feat.properties && feat.properties.navn) ? feat.properties.navn : 'Unknown';
+      var value = yearRows[name] || 0;
+      layer.bindTooltip('<strong>' + name + '</strong><br>' + value.toLocaleString() + ' Jutlanders', { sticky: true });
+    },
+  }).addTo(leafletMap);
+
+  labelLayer = L.layerGroup();
+  appData.geo.features.forEach(function(feat) {
+    var name = feat.properties && feat.properties.navn;
+    if (!name) return;
+    var c = featureCentroid(feat);
+    if (!c) return;
+    L.marker([c[1], c[0]], {
+      icon: L.divIcon({
+        html: '<div style="font-size:9px;font-weight:700;color:#1e3a5f;white-space:nowrap;text-shadow:1px 1px 2px #fff,-1px -1px 2px #fff;">' + name + '</div>',
+        iconSize: [120,20], iconAnchor: [60,10], className: '',
+      }),
+    }).addTo(labelLayer);
+  });
+  labelLayer.addTo(leafletMap);
+
+  if (legendControl) { leafletMap.removeControl(legendControl); legendControl = null; }
+  legendControl = L.control({ position: 'bottomright' });
+  legendControl.onAdd = function() {
+    var div = L.DomUtil.create('div','legend');
+    var steps = COLOR_STEPS.length - 1;
+    var html = '<h4>Jutlanders (' + currentYear + ')</h4>';
+    for (var i = steps; i >= 0; i--) {
+      var val = Math.round((i/steps)*maxVal);
+      html += '<div class="legend-item"><div class="legend-swatch" style="background:' + COLOR_STEPS[i] + '"></div><span>' + val.toLocaleString() + '</span></div>';
     }
+    div.innerHTML = html;
+    return div;
+  };
+  legendControl.addTo(leafletMap);
+}
 
-    function formatByMetric(metric, value) {
-      const meta = metricsData.metrics[metric];
-      if (value == null) return "n/a";
-      if (meta.unit === "%") return `${formatNumber(value, meta.decimals)}%`;
-      return formatNumber(value, meta.decimals);
-    }
+document.getElementById('year-slider').addEventListener('input', function(e) {
+  currentYear = e.target.value;
+  document.getElementById('year-label').textContent = currentYear;
+  render();
+});
+document.getElementById('sex-select').addEventListener('change', function(e) { currentSex = e.target.value; render(); });
+document.getElementById('region-select').addEventListener('change', function(e) { currentRegion = e.target.value; render(); });
 
-    function getRampColors(metric) {
-      const unit = metricsData.metrics[metric].unit;
-      if (unit === "%") {
-        return ["#f0fdfa", "#99f6e4", "#2dd4bf", "#0d9488", "#115e59"];
-      }
-      return ["#fff7ed", "#fdba74", "#fb923c", "#ea580c", "#9a3412"];
-    }
-
-    function hexToRgb(hex) {
-      const n = hex.replace("#", "");
-      return {
-        r: parseInt(n.slice(0, 2), 16),
-        g: parseInt(n.slice(2, 4), 16),
-        b: parseInt(n.slice(4, 6), 16)
-      };
-    }
-
-    function interpColor(c1, c2, t) {
-      const a = hexToRgb(c1);
-      const b = hexToRgb(c2);
-      const r = Math.round(a.r + (b.r - a.r) * t);
-      const g = Math.round(a.g + (b.g - a.g) * t);
-      const b2 = Math.round(a.b + (b.b - a.b) * t);
-      return `rgb(${r}, ${g}, ${b2})`;
-    }
-
-    function colorScale(value, min, max, metric) {
-      if (value == null || Number.isNaN(value)) return "#e5e7eb";
-      const colors = getRampColors(metric);
-      if (max <= min) return colors[colors.length - 1];
-
-      const unit = metricsData.metrics[metric].unit;
-      let t;
-      if (unit === "count") {
-        const lv = Math.log10(Math.max(value, 1));
-        const lmin = Math.log10(Math.max(min, 1));
-        const lmax = Math.log10(Math.max(max, 1));
-        t = (lv - lmin) / (lmax - lmin || 1);
-      } else {
-        t = (value - min) / (max - min);
-      }
-      t = Math.min(1, Math.max(0, t));
-
-      const seg = (colors.length - 1) * t;
-      const i = Math.floor(seg);
-      const frac = seg - i;
-      if (i >= colors.length - 1) return colors[colors.length - 1];
-      return interpColor(colors[i], colors[i + 1], frac);
-    }
-
-    function getDistrictValue(districtName, metric, year) {
-      const y = metricsData.district_year[String(year)] || {};
-      const row = y[districtName];
-      return row ? row[metric] : null;
-    }
-
-    function getStatsForYear(metric, year) {
-      const y = metricsData.district_year[String(year)] || {};
-      const values = Object.values(y).map((d) => d[metric]).filter((v) => v != null && !Number.isNaN(v));
-      if (!values.length) return { min: 0, max: 0 };
-      return { min: Math.min(...values), max: Math.max(...values) };
-    }
-
-    function tooltipHtml(districtName, year) {
-      const y = metricsData.district_year[String(year)] || {};
-      const row = y[districtName] || {};
-      return `
-        <div style="min-width:180px">
-          <strong>${districtName}</strong><br>
-          Year: <b>${year}</b><br>
-          Jutland-born share: <b>${formatByMetric("jutland_share_pct", row.jutland_share_pct)}</b><br>
-          København-born share: <b>${formatByMetric("local_share_pct", row.local_share_pct)}</b><br>
-          High-education share: <b>${formatByMetric("high_ed_share_pct", row.high_ed_share_pct)}</b><br>
-          Jutland-born residents: <b>${formatByMetric("jutland_residents", row.jutland_residents)}</b>
-        </div>
-      `;
-    }
-
-    function updateCitySummary(year) {
-      const city = metricsData.city_year[String(year)];
-      if (!city) {
-        citySummary.innerHTML = "No city data for this year";
-        return;
-      }
-      citySummary.innerHTML = `
-        <div>Jutland-born share<br><b>${formatByMetric("jutland_share_pct", city.jutland_share_pct)}</b></div>
-        <div>København-born share<br><b>${formatByMetric("local_share_pct", city.local_share_pct)}</b></div>
-        <div>Jutland-born residents<br><b>${formatByMetric("jutland_residents", city.jutland_residents)}</b></div>
-        <div>Total residents<br><b>${formatByMetric("total_residents", city.total_residents)}</b></div>
-      `;
-    }
-
-    function updateLegend(metric, min, max) {
-      const title = document.getElementById("legendTitle");
-      const ramp = document.getElementById("legendRamp");
-      const minEl = document.getElementById("legendMin");
-      const maxEl = document.getElementById("legendMax");
-      const meta = metricsData.metrics[metric];
-
-      title.textContent = meta.label;
-      const colors = getRampColors(metric);
-      ramp.style.background = `linear-gradient(90deg, ${colors.join(",")})`;
-      minEl.textContent = formatByMetric(metric, min);
-      maxEl.textContent = formatByMetric(metric, max);
-    }
-
-    function updateMap() {
-      const metric = state.metric;
-      const year = state.year;
-      yearValue.textContent = year;
-
-      const { min, max } = getStatsForYear(metric, year);
-      updateLegend(metric, min, max);
-      updateCitySummary(year);
-
-      geoLayer.eachLayer((layer) => {
-        const district = layer.feature.properties.navn;
-        const value = getDistrictValue(district, metric, year);
-        layer.setStyle({
-          fillColor: colorScale(value, min, max, metric),
-          fillOpacity: 0.82,
-          color: "#0f172a",
-          weight: 1
-        });
-        layer.bindTooltip(tooltipHtml(district, year), { sticky: true });
-      });
-    }
-
-    function setupControls() {
-      Object.entries(metricsData.metrics).forEach(([key, meta]) => {
-        const opt = document.createElement("option");
-        opt.value = key;
-        opt.textContent = meta.label;
-        metricSelect.appendChild(opt);
-      });
-      metricSelect.value = state.metric;
-
-      yearInput.min = metricsData.years[0];
-      yearInput.max = metricsData.years[metricsData.years.length - 1];
-      yearInput.step = 1;
-      state.year = metricsData.latest_year;
-      yearInput.value = state.year;
-
-      metricSelect.addEventListener("change", (e) => {
-        state.metric = e.target.value;
-        updateMap();
-      });
-      yearInput.addEventListener("input", (e) => {
-        state.year = Number(e.target.value);
-        updateMap();
-      });
-    }
-
-    function initMap(geo, web) {
-      geoData = geo;
-      metricsData = web;
-
-      geoLayer = L.geoJSON(geoData, {
-        style: {
-          color: "#0f172a",
-          weight: 1,
-          fillOpacity: 0.82
-        }
-      }).addTo(map);
-
-      setupControls();
-      updateMap();
-    }
-
-    if (window.BYDEL_GEOJSON && window.WEB_METRICS) {
-      initMap(window.BYDEL_GEOJSON, window.WEB_METRICS);
-    } else {
-      Promise.all([
-        fetch("bydel.csv").then((r) => r.text()).then((t) => JSON.parse(t)),
-        fetch("web_metrics.json").then((r) => r.json())
-      ])
-        .then(([geo, web]) => initMap(geo, web))
-        .catch((err) => {
-          console.error(err);
-          alert("Failed to load map data. Ensure bydel_geo.js/web_metrics.js (or JSON files) are available in project root.");
-        });
-    }
-  </script>
+fetch('data/map_data.json')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    appData = data;
+    var years = data.years;
+    var slider = document.getElementById('year-slider');
+    slider.min = Math.min.apply(null, years);
+    slider.max = Math.max.apply(null, years);
+    var defaultYear = years[years.length - 2] !== undefined ? years[years.length - 2] : Math.max.apply(null, years);
+    slider.value = defaultYear;
+    currentYear = String(defaultYear);
+    document.getElementById('year-label').textContent = currentYear;
+    render();
+  })
+  .catch(function(err) {
+    console.error('Failed to load map data:', err);
+    document.getElementById('map').innerHTML = '<p style="padding:2rem;color:#dc2626">Could not load map data. Make sure you access the page via http://localhost:8000 (not file://).</p>';
+  });
+</script>
 </body>
 </html>
