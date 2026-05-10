@@ -60,6 +60,7 @@
   </div>
   <div id="map"></div>
 </div>
+<script src="data/map_data.js"></script>
 <script>
 const leafletMap = L.map('map', { center: [55.68, 12.56], zoom: 11 });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -162,24 +163,66 @@ document.getElementById('year-slider').addEventListener('input', function(e) {
 document.getElementById('sex-select').addEventListener('change', function(e) { currentSex = e.target.value; render(); });
 document.getElementById('region-select').addEventListener('change', function(e) { currentRegion = e.target.value; render(); });
 
-fetch('data/map_data.json')
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    appData = data;
-    var years = data.years;
-    var slider = document.getElementById('year-slider');
-    slider.min = Math.min.apply(null, years);
-    slider.max = Math.max.apply(null, years);
-    var defaultYear = years[years.length - 2] !== undefined ? years[years.length - 2] : Math.max.apply(null, years);
-    slider.value = defaultYear;
-    currentYear = String(defaultYear);
-    document.getElementById('year-label').textContent = currentYear;
-    render();
-  })
-  .catch(function(err) {
-    console.error('Failed to load map data:', err);
-    document.getElementById('map').innerHTML = '<p style="padding:2rem;color:#dc2626">Could not load map data. Make sure you access the page via http://localhost:8000 (not file://).</p>';
-  });
+function fetchJsonWithFallback(urls, idx) {
+  if (idx >= urls.length) {
+    return Promise.reject(new Error('All map-data URLs failed.'));
+  }
+  var url = urls[idx];
+  return fetch(url, { cache: 'no-store' })
+    .then(function(r) {
+      if (!r.ok) {
+        throw new Error('HTTP ' + r.status + ' at ' + url);
+      }
+      return r.json();
+    })
+    .catch(function(err) {
+      console.warn('Map data load failed for', url, err);
+      return fetchJsonWithFallback(urls, idx + 1);
+    });
+}
+
+var candidates = [
+  'data/map_data.json',
+  './data/map_data.json',
+  '../data/map_data.json',
+  new URL('data/map_data.json', window.location.href).toString(),
+];
+
+// Deduplicate candidate URLs while preserving order.
+candidates = candidates.filter(function(u, i) { return candidates.indexOf(u) === i; });
+
+function applyMapData(data) {
+  appData = data;
+  var years = data.years;
+  var slider = document.getElementById('year-slider');
+  slider.min = Math.min.apply(null, years);
+  slider.max = Math.max.apply(null, years);
+  var defaultYear = years[years.length - 2] !== undefined ? years[years.length - 2] : Math.max.apply(null, years);
+  slider.value = defaultYear;
+  currentYear = String(defaultYear);
+  document.getElementById('year-label').textContent = currentYear;
+  render();
+}
+
+if (window.MAP_DATA && window.MAP_DATA.data && window.MAP_DATA.geo) {
+  applyMapData(window.MAP_DATA);
+} else {
+  fetchJsonWithFallback(candidates, 0)
+    .then(function(data) {
+      applyMapData(data);
+    })
+    .catch(function(err) {
+      console.error('Failed to load map data:', err);
+      var isFileProtocol = window.location.protocol === 'file:';
+      var hint = isFileProtocol
+        ? 'This page is being opened as file:// and map_data.js/json was not reachable. Start a local server via python -m http.server and open localhost.'
+        : 'Check that data/map_data.js or data/map_data.json exists and is reachable from this page.';
+      var details = 'Tried: ' + candidates.join(', ');
+      document.getElementById('map').innerHTML =
+        '<p style=\"padding:1.25rem;color:#dc2626;line-height:1.5\">Could not load map data.<br>' +
+        hint + '<br><span style=\"font-size:12px;color:#7f1d1d\">' + details + '</span></p>';
+    });
+}
 </script>
 </body>
 </html>

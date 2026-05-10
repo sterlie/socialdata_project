@@ -397,6 +397,15 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    # Optional file:// fallback for map.html (avoids fetch restrictions on local files)
+    map_json_path = ROOT / "data" / "map_data.json"
+    if map_json_path.exists():
+        map_data = json.loads(map_json_path.read_text(encoding="utf-8"))
+        (ROOT / "data" / "map_data.js").write_text(
+            "window.MAP_DATA = " + json.dumps(map_data, ensure_ascii=False) + ";",
+            encoding="utf-8",
+        )
+
     print("Wrote:")
     print("- plots/citywide_origin_shares.png")
     print("- plots/district_jutland_share_latest.png")
@@ -407,6 +416,8 @@ def main() -> None:
     print("- web_metrics.json")
     print("- web_metrics.js")
     print("- bydel_geo.js")
+    if map_json_path.exists():
+        print("- data/map_data.js")
 
 
 if __name__ == "__main__":
