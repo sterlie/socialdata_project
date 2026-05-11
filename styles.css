@@ -17,7 +17,7 @@ body {
   margin: 0;
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
   color: var(--ink);
-  background: url("stopjyden2.png");
+  background: url("plots/stopjyden2.png");
   background-size: cover;
   background-position: center -325px;
   background-attachment: fixed;
