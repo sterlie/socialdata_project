@@ -23,6 +23,8 @@ body {
   background-attachment: fixed;
 }
 
+
+
 .story {
   max-width: 1040px;
   margin: 0 auto;
@@ -39,7 +41,7 @@ body {
 }
 
 .hero {
-  margin-top: 5.5rem;
+  margin-top: 25rem;
   padding-top: 2.5rem;
   padding-bottom: 2rem;
 }

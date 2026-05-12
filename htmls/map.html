@@ -23,10 +23,10 @@
     #year-group input[type=range] { flex: 1; accent-color: #d97706; cursor: pointer; }
     #year-label { font-size: 15px; font-weight: 700; color: #1e3a5f; min-width: 42px; }
     #map { flex: 1; min-height: 0; }
-    .legend { background: rgba(255,255,255,0.92); padding: 8px 12px; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.15); font-size: 12px; line-height: 1.6; min-width: 130px; }
+    .legend { background: rgba(255,255,255,0.92); padding: 8px 12px; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.15); font-size: 12px; min-width: 140px; }
     .legend h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #6b7280; margin-bottom: 6px; }
-    .legend-item { display: flex; align-items: center; gap: 7px; }
-    .legend-swatch { width: 16px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+    .legend-bar { width: 100%; height: 12px; border-radius: 3px; }
+    .legend-labels { display: flex; justify-content: space-between; margin-top: 3px; font-size: 11px; color: #374151; }
   </style>
 </head>
 <body>
@@ -60,7 +60,7 @@
   </div>
   <div id="map"></div>
 </div>
-<script src="data/map_data.js"></script>
+<script src="../data/map_data.js"></script>
 <script>
 const leafletMap = L.map('map', { center: [55.68, 12.56], zoom: 11 });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -143,12 +143,10 @@ function render() {
   legendControl = L.control({ position: 'bottomright' });
   legendControl.onAdd = function() {
     var div = L.DomUtil.create('div','legend');
-    var steps = COLOR_STEPS.length - 1;
+    var gradient = COLOR_STEPS.join(', ');
     var html = '<h4>Jutlanders (' + currentYear + ')</h4>';
-    for (var i = steps; i >= 0; i--) {
-      var val = Math.round((i/steps)*maxVal);
-      html += '<div class="legend-item"><div class="legend-swatch" style="background:' + COLOR_STEPS[i] + '"></div><span>' + val.toLocaleString() + '</span></div>';
-    }
+    html += '<div class="legend-bar" style="background: linear-gradient(to right, ' + gradient + ')"></div>';
+    html += '<div class="legend-labels"><span>0</span><span>' + Math.round(maxVal/2).toLocaleString() + '</span><span>' + maxVal.toLocaleString() + '</span></div>';
     div.innerHTML = html;
     return div;
   };
@@ -182,10 +180,10 @@ function fetchJsonWithFallback(urls, idx) {
 }
 
 var candidates = [
-  'data/map_data.json',
-  './data/map_data.json',
   '../data/map_data.json',
-  new URL('data/map_data.json', window.location.href).toString(),
+  'data/map_data.json',
+  '../../data/map_data.json',
+  new URL('../data/map_data.json', window.location.href).toString(),
 ];
 
 // Deduplicate candidate URLs while preserving order.
